@@ -3,28 +3,48 @@ package com.github.kamys.managerProduct.logic;
 import java.util.List;
 
 /**
- * This facade is main for using library ManagerProduct.
+ * Using this facade for to work with logic library ManagerProduct.
  */
-class ManagerProduct {
-    private List<Layout> allLayout;
-    private List<Section> allSection;
+public class LogicFacade {
+    private List<Layout> layouts;
+    private List<Section> sections;
 
     /**
-     * Use for get all {@link Layout}.
+     * Use for select all {@link Layout}.
      *
      * @return all {@link Layout}.
      */
-    List<Layout> getAllLayout() {
-        return allLayout;
+    List<Layout> selectLayout() {
+        return layouts;
     }
 
     /**
-     * Use for get all {@link Section}.
+     * Use for select all {@link Section}.
      *
      * @return all {@link Section}.
      */
-    List<Section> getAllSection() {
-        return allSection;
+    List<Section> selectSection() {
+        return sections;
+    }
+
+    /**
+     * Use for selection by parameters.
+     *
+     * @param layout contains parameters for selection.
+     * @return found in the parameters.
+     */
+    Layout selectLayout(Layout layout) {
+        return null;
+    }
+
+    /**
+     * Use for selection by parameters.
+     *
+     * @param section contains parameters for selection.
+     * @return found in the parameters.
+     */
+    Section selectSection(Section section) {
+        return null;
     }
 
     /**

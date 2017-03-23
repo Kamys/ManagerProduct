@@ -9,4 +9,8 @@ abstract class Section {
     void setName(String name) {
         this.name = name;
     }
+
+    String getName() {
+        return name;
+    }
 }

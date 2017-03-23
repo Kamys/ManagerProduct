@@ -8,6 +8,10 @@ package com.github.kamys.managerProduct.logic;
 class Layout {
     private String name;
 
+    String getName() {
+        return name;
+    }
+
     void setName(String name) {
         this.name = name;
     }
