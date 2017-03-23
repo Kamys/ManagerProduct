@@ -1,4 +1,4 @@
-package com.github.kamys.managerProduct.data;
+package com.github.kamys.managerProduct.data.managers;
 
 import java.util.Collection;
 

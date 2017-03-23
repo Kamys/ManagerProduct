@@ -1,6 +1,8 @@
 package com.github.kamys.managerProduct.logic;
 
-import com.github.kamys.managerProduct.data.Manager;
+import com.github.kamys.managerProduct.data.managers.Manager;
+import com.github.kamys.managerProduct.logic.layout.Layout;
+import com.github.kamys.managerProduct.logic.section.Section;
 
 /**
  * This default implements for LogicFacade.

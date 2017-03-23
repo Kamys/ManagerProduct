@@ -1,4 +1,4 @@
-package com.github.kamys.managerProduct.logic;
+package com.github.kamys.managerProduct.logic.section;
 
 /**
  * Category can consist only other {@link Section}.
