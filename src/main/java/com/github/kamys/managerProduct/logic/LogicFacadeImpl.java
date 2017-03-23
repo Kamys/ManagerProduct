@@ -1,61 +1,31 @@
 package com.github.kamys.managerProduct.logic;
 
-import java.util.List;
+import com.github.kamys.managerProduct.data.Manager;
 
 /**
  * This default implements for LogicFacade.
  */
 public class LogicFacadeImpl implements LogicFacade {
-    private List<Layout> layouts;
-    private List<Section> sections;
+    private Manager<Layout> layoutManager;
+    private Manager<Section> sectionManager;
 
     @Override
-    public List<Layout> selectLayout() {
-        return layouts;
+    public Manager<Layout> getLayoutManager() {
+        return layoutManager;
     }
 
     @Override
-    public List<Section> selectSection() {
-        return sections;
+    public void setLayoutManager(Manager<Layout> layoutManager) {
+        this.layoutManager = layoutManager;
     }
 
     @Override
-    public Layout selectLayout(Layout layout) {
-        return null;
+    public Manager<Section> getSectionManager() {
+        return sectionManager;
     }
 
     @Override
-    public Section selectSection(Section section) {
-        return null;
-    }
-
-    @Override
-    public void saveLayout(Layout layout) {
-
-    }
-
-    @Override
-    public void saveSection(Section section) {
-
-    }
-
-    @Override
-    public void updateSection(Section findSection, Section newSection) {
-
-    }
-
-    @Override
-    public void updateLayout(Layout findLayout, Layout newLayout) {
-
-    }
-
-    @Override
-    public void deleteLayout(Layout findLayout) {
-
-    }
-
-    @Override
-    public void deleteSection(Section findSection) {
-
+    public void setSectionManager(Manager<Section> sectionManager) {
+        this.sectionManager = sectionManager;
     }
 }
