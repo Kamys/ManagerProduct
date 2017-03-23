@@ -11,10 +11,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class LogicFacadeTest {
+public class LogicFacadeImplTest {
     private final static int numberAddSection = 5;
     private final static int numberAddLayout = 5;
-    private final LogicFacade logicFacade = new LogicFacade();
+    private final LogicFacadeImpl logicFacade = new LogicFacadeImpl();
 
     private Section createSectionMock(String name) {
         Section mock = mock(Section.class);

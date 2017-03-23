@@ -1,5 +1,6 @@
 package com.github.kamys.managerProduct;
 
+import com.github.kamys.managerProduct.data.BaseFacade;
 import com.github.kamys.managerProduct.logic.LogicFacade;
 
 /**
@@ -7,6 +8,7 @@ import com.github.kamys.managerProduct.logic.LogicFacade;
  */
 class ManagerProduct {
     private LogicFacade logicFacade;
+    private BaseFacade baseFacade;
 
     public LogicFacade getLogicFacade() {
         return logicFacade;
@@ -14,5 +16,13 @@ class ManagerProduct {
 
     public void setLogicFacade(LogicFacade logicFacade) {
         this.logicFacade = logicFacade;
+    }
+
+    public BaseFacade getBaseFacade() {
+        return baseFacade;
+    }
+
+    public void setBaseFacade(BaseFacade baseFacade) {
+        this.baseFacade = baseFacade;
     }
 }
