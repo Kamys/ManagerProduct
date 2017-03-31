@@ -1,6 +1,8 @@
 package com.github.kamys.managerProduct.logic.layout;
 
+import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,6 +26,12 @@ public class Attribute {
             name = "link_attribute_and_value",
             joinColumns = @JoinColumn(name = "id_attribute"),
             inverseJoinColumns = @JoinColumn(name = "id_value"))
+    @GenericGenerator(name = "inc", strategy = "increment")
+    @CollectionId(
+            columns = @Column(name = "id"),
+            type = @Type(type = "long"),
+            generator = "inc"
+    )
     private List<AttrValue> attrValues = new ArrayList<>();
 
     public Attribute() {
