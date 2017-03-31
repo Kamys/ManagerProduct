@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Use in {@link Layout}. Need for records attrValues and name is attribute.
+ * Use in {@link Layout}. Need for records values and name is attribute.
  */
 @Entity
 @Table(name = "attributes")
@@ -32,7 +32,7 @@ public class Attribute {
             type = @Type(type = "long"),
             generator = "inc"
     )
-    private List<AttrValue> attrValues = new ArrayList<>();
+    private List<Value> values = new ArrayList<>();
 
     public Attribute() {
     }
@@ -57,16 +57,16 @@ public class Attribute {
         this.name = name;
     }
 
-    public List<AttrValue> getAttrValues() {
-        return attrValues;
+    public List<Value> getValues() {
+        return values;
     }
 
-    public void setAttrValues(List<AttrValue> attrValues) {
-        this.attrValues = attrValues;
+    public void setValues(List<Value> values) {
+        this.values = values;
     }
 
-    public void addValue(AttrValue attrValue) {
-        this.attrValues.add(attrValue);
+    public void addValue(Value value) {
+        this.values.add(value);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Attribute {
         return "Attribute{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", attrValues=" + attrValues +
+                ", values=" + values +
                 '}';
     }
 }

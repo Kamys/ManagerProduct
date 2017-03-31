@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "values")
-public class AttrValue {
+public class Value {
     @Id
     @GenericGenerator(name = "inc", strategy = "increment")
     @GeneratedValue(generator = "inc")
@@ -19,10 +19,10 @@ public class AttrValue {
     @Column(name = "value")
     private String value;
 
-    public AttrValue() {
+    public Value() {
     }
 
-    public AttrValue(String value) {
+    public Value(String value) {
         this.value = value;
     }
 
@@ -44,7 +44,7 @@ public class AttrValue {
 
     @Override
     public String toString() {
-        return "AttrValue{" +
+        return "Value{" +
                 "id=" + id +
                 ", value='" + value + '\'' +
                 '}';
