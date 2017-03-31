@@ -1,5 +1,7 @@
 package com.github.kamys.managerProduct.data;
 
+import com.github.kamys.managerProduct.logic.layout.AttrValue;
+import com.github.kamys.managerProduct.logic.layout.Attribute;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -55,6 +57,8 @@ public class DataBaseHibernate {
     private SessionFactory createSessionFactory() {
         Configuration configuration = new Configuration()
                 .addAnnotatedClass(Layout.class)
+                .addAnnotatedClass(Attribute.class)
+                .addAnnotatedClass(AttrValue.class)
                 .setProperties(getProperties());
 
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()

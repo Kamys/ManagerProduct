@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "layouts", schema = "public")
 public class Layout {
-    private static int idCounter = 0;
+    private static int idCounter = 3;
 
     {
         idCounter++;
