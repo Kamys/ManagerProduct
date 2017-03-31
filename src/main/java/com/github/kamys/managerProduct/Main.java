@@ -14,13 +14,14 @@ public class Main {
         LOGGER.info("Hello world!");
         ManagerImpl<Attribute> manager = new ManagerImpl<>();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             Attribute attr_1 = new Attribute("Attr_" + i);
             attr_1.addValue(new Value("Value_1"));
             attr_1.addValue(new Value("Value_2"));
             attr_1.addValue(new Value("Value_3"));
             manager.save(attr_1);
         }
+        manager.close();
     }
 
     public static void test1() {

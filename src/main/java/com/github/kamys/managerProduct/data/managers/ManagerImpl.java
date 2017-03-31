@@ -35,4 +35,9 @@ public class ManagerImpl<T> implements Manager<T> {
     public Collection<T> selectAll() {
         return null;
     }
+
+    @Override
+    public void close() {
+        dataBase.colese();
+    }
 }

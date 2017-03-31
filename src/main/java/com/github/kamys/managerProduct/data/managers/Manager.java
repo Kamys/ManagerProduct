@@ -44,4 +44,10 @@ public interface Manager<T> {
      * @return all T.
      */
     Collection<T> selectAll();
+
+    /**
+     * Use for complete operation.
+     * Close stream which work with T.
+     */
+    void close();
 }

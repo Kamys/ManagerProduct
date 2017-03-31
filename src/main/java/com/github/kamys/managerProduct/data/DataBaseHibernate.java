@@ -19,6 +19,7 @@ import java.util.Properties;
  */
 public class DataBaseHibernate {
     private static final Logger LOGGER = Logger.getLogger(DataBaseHibernate.class);
+    private final SessionFactory factory = createSessionFactory();
 
     /**
      * Save object with hibernate annotation in data base.
@@ -26,20 +27,15 @@ public class DataBaseHibernate {
      * @param t which need save in data base.
      */
     public void saveObject(Object t) {
-        LOGGER.info("Save: " + t);
+        LOGGER.info("saveObject: " + t);
         Transaction tr = null;
-        SessionFactory factory = createSessionFactory();
-        Session session = factory.openSession();
-        try {
+        try (Session session = factory.openSession()) {
             tr = session.beginTransaction();
             session.save(t);
             tr.commit();
         } catch (HibernateException e) {
             if (tr != null) tr.rollback();
             LOGGER.warn(e);
-        } finally {
-            session.close();
-            factory.close();
         }
     }
 
@@ -65,5 +61,11 @@ public class DataBaseHibernate {
                 .applySettings(configuration.getProperties());
 
         return configuration.buildSessionFactory(builder.build());
+    }
+
+    public void colese() {
+        if (!factory.isClosed()) {
+            factory.close();
+        }
     }
 }
