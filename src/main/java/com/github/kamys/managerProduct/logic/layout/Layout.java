@@ -1,11 +1,13 @@
 package com.github.kamys.managerProduct.logic.layout;
 
 import com.github.kamys.managerProduct.logic.Goods;
+import org.hibernate.annotations.CollectionId;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This model layout for {@link Goods}.
@@ -15,25 +17,41 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "layouts", schema = "public")
 public class Layout {
-    private static int idCounter = 3;
-
-    {
-        idCounter++;
-    }
 
     @Id
-    @Column(name = "id")
-    private int id = idCounter;
+    @GenericGenerator(name = "inc", strategy = "increment")
+    @GeneratedValue(generator = "inc")
+    @Column(name = "id", nullable = false)
+    private int id;
 
     @Column(name = "name", nullable = false)
     private String name;
-    //private Manager<Attribute> atributeManager;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "link_layout_and_attribute",
+            joinColumns = @JoinColumn(name = "id_layout"),
+            inverseJoinColumns = @JoinColumn(name = "id_attribute"))
+    @GenericGenerator(name = "inc", strategy = "increment")
+    @CollectionId(
+            columns = @Column(name = "id"),
+            type = @Type(type = "long"),
+            generator = "inc"
+    )
+    private List<Attribute> attributeManager = new ArrayList<>();
 
     public Layout() {
     }
 
     public Layout(String name) {
         this.name = name;
+    }
+
+    public List<Attribute> getAttributeList() {
+        return attributeManager;
+    }
+
+    public void setAttributeManager(List<Attribute> attributeManager) {
+        this.attributeManager = attributeManager;
     }
 
     public int getId() {
