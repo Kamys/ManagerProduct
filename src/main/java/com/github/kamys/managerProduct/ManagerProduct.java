@@ -6,7 +6,7 @@ import com.github.kamys.managerProduct.logic.LogicFacade;
 /**
  * Using this facade is main for to work with library ManagerProduct.
  */
-class ManagerProduct {
+public class ManagerProduct {
     private LogicFacade logicFacade;
     private BaseFacade baseFacade;
 
