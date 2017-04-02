@@ -1,7 +1,7 @@
 package com.github.kamys.managerProduct;
 
 import com.github.kamys.managerProduct.data.managers.Manager;
-import com.github.kamys.managerProduct.data.managers.ManagerImpl;
+import com.github.kamys.managerProduct.data.managers.ManagerLayout;
 import com.github.kamys.managerProduct.logic.layout.Attribute;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import com.github.kamys.managerProduct.logic.layout.Value;
@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         LOGGER.info("Hello world!");
-        Manager<Layout> manager = new ManagerImpl<>();
+        Manager<Layout> manager = new ManagerLayout();
 
         for (int i = 0; i < 5; i++) {
             Layout layout = new Layout();
@@ -28,10 +28,5 @@ public class Main {
             manager.save(layout);
         }
         manager.close();
-    }
-
-    public static void test1() {
-        ManagerImpl<Layout> manager = new ManagerImpl<>();
-        manager.save(new Layout("Test_1"));
     }
 }
