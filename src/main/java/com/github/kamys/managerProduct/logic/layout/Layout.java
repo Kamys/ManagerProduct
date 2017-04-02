@@ -37,7 +37,7 @@ public class Layout {
             type = @Type(type = "long"),
             generator = "inc"
     )
-    private List<Attribute> attributeManager = new ArrayList<>();
+    private List<Attribute> attributes = new ArrayList<>();
 
     public Layout() {
     }
@@ -47,11 +47,11 @@ public class Layout {
     }
 
     public List<Attribute> getAttributeList() {
-        return attributeManager;
+        return attributes;
     }
 
-    public void setAttributeManager(List<Attribute> attributeManager) {
-        this.attributeManager = attributeManager;
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     public int getId() {
