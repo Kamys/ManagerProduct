@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -17,6 +18,7 @@ import java.util.Properties;
 public abstract class HibernateManager {
     private static final Logger LOGGER = Logger.getLogger(HibernateManager.class);
     protected final SessionFactory factory = createSessionFactory();
+    protected final EntityManager entityManager = factory.createEntityManager();
 
 
 
@@ -34,7 +36,6 @@ public abstract class HibernateManager {
         }
         return properties;
     }
-
 
     private SessionFactory createSessionFactory() {
         Configuration configuration = new Configuration()

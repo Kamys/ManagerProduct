@@ -18,25 +18,25 @@ public interface Manager<T> {
     /**
      * Use for update T in database.
      *
-     * @param findT contains parameters for finding T and update him.
+     * @param searchCriteria contains parameters for finding T and update him.
      * @param newT  replacement is for found is T.
      */
-    void update(T findT, T newT);
+    void update(SearchCriteria<T> searchCriteria, T newT);
 
     /**
      * Use for delete T.
      *
-     * @param findT contains parameters for finding T and delete him
+     * @param searchCriteria contains parameters for finding T and delete him
      */
-    Collection<T> delete(T findT);
+    Collection<T> delete(SearchCriteria<T> searchCriteria);
 
     /**
      * Use for selection by parameters.
      *
-     * @param findT contains parameters for finding T.
+     * @param searchCriteria contains parameters for finding T.
      * @return found is T.
      */
-    Collection<T> select(T findT);
+    Collection<T> select(SearchCriteria<T> searchCriteria);
 
     /**
      * Use for selection all T.

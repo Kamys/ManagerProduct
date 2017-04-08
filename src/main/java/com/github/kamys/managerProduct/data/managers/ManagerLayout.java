@@ -7,6 +7,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
 
 /**
@@ -30,18 +32,20 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public void update(Layout findT, Layout newT) {
-
+    public void update(SearchCriteria<Layout> searchCriteria, Layout layout) {
     }
 
     @Override
-    public Collection<Layout> delete(Layout findT) {
+    public Collection<Layout> delete(SearchCriteria<Layout> searchCriteria) {
         return null;
     }
 
     @Override
-    public Collection<Layout> select(Layout findT) {
-        return null;
+    public Collection<Layout> select(SearchCriteria<Layout> searchCriteria) {
+        LOGGER.info("select:" + searchCriteria);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Layout> criteria = searchCriteria.createCriteria(criteriaBuilder);
+        return entityManager.createQuery(criteria).getResultList();
     }
 
     @Override
