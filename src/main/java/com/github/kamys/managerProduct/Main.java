@@ -2,7 +2,8 @@ package com.github.kamys.managerProduct;
 
 import com.github.kamys.managerProduct.data.managers.Manager;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
-import com.github.kamys.managerProduct.data.managers.SearchLayout;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilder;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilderFactory;
 import com.github.kamys.managerProduct.logic.layout.Attribute;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
@@ -37,15 +38,21 @@ public class Main {
         manager.close();
     }
 
-    public static void select() {
+    //TODO: Selecting multiple.
+    private static void select() {
         Manager<Layout> manager = new ManagerLayout();
 
 
         Layout layout = new Layout();
-        layout.setName("Пельмешки");
+        layout.setName("Молоко");
         layout.setId(1);
 
-        Collection<Layout> select = manager.select(new SearchLayout(layout));
+        CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
+        CriteriaBuilder<Layout> criteriaBuilder = factory.createLayout(layout);
+        criteriaBuilder.setUseInCriteria("id", false);
+        criteriaBuilder.setUseInCriteria("name", true);
+
+        Collection<Layout> select = manager.select(criteriaBuilder);
         LOGGER.info("Select = " + select);
         manager.close();
     }

@@ -1,13 +1,13 @@
 package com.github.kamys.managerProduct.data.managers;
 
 import com.github.kamys.managerProduct.data.HibernateManager;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilder;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
 
@@ -32,19 +32,19 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public void update(SearchCriteria<Layout> searchCriteria, Layout layout) {
+    public void update(CriteriaBuilder<Layout> criteriaBuilder, Layout layout) {
     }
 
     @Override
-    public Collection<Layout> delete(SearchCriteria<Layout> searchCriteria) {
+    public Collection<Layout> delete(CriteriaBuilder<Layout> criteriaBuilder) {
         return null;
     }
 
     @Override
-    public Collection<Layout> select(SearchCriteria<Layout> searchCriteria) {
-        LOGGER.info("select:" + searchCriteria);
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Layout> criteria = searchCriteria.createCriteria(criteriaBuilder);
+    public Collection<Layout> select(CriteriaBuilder<Layout> builderCriteria) {
+        LOGGER.info("select:" + builderCriteria);
+        javax.persistence.criteria.CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Layout> criteria = builderCriteria.createCriteria(criteriaBuilder);
         return entityManager.createQuery(criteria).getResultList();
     }
 
