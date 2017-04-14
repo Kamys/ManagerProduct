@@ -38,14 +38,13 @@ public class Main {
         manager.close();
     }
 
-    //TODO: Selecting multiple.
     private static void select() {
         Manager<Layout> manager = new ManagerLayout();
 
 
         Layout layout = new Layout();
-        layout.setName("Молоко");
-        layout.setId(1);
+        layout.setName(null);
+        layout.setId(2);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
         CriteriaQueryBuilder<Layout> criteriaQueryBuilder = factory.createLayout(layout);

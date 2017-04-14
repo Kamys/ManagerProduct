@@ -6,7 +6,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,18 +67,26 @@ public class CriteriaQueryBuilder<T> {
         Root<T> layoutRoot = criteriaQuery.from(classT);
         criteriaQuery.select(layoutRoot);
 
+        Map<String, ParameterCriteria> mapCriteria = sortingParameterForCriteria();
         LOGGER.info("createCriteriaQuery: mapCriteria = " + mapCriteria);
+        List<Predicate> predicates = new ArrayList<>();
         for (String key : mapCriteria.keySet()) {
             ParameterCriteria param = mapCriteria.get(key);
-            if (param.isUseInCriteria()) continue;
-            LOGGER.debug("createCriteriaQuery: add parameter " + param.name + " = " + param.getName());
-            Path<Object> nameParameter = layoutRoot.get(key);
             Object value = param.getValue();
+            LOGGER.debug("createCriteriaQuery: add parameter " + param.getName() + " = " + value);
 
-            Predicate restriction = criteriaBuilder.equal(nameParameter, value);
-            criteriaQuery.where(restriction);
+            Path<Object> nameParameter = layoutRoot.get(key);
+            predicates.add(criteriaBuilder.equal(nameParameter, value));
         }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
         return criteriaQuery;
+    }
+
+    private Map<String, ParameterCriteria> sortingParameterForCriteria() {
+        Map<String, ParameterCriteria> criteriaMap = new HashMap<>();
+        criteriaMap.putAll(mapCriteria);
+        criteriaMap.values().removeIf(next -> !next.isUseInCriteria() || next.getValue() == null);
+        return criteriaMap;
     }
 
     @Override
