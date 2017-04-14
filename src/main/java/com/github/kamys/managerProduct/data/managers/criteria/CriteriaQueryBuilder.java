@@ -12,13 +12,13 @@ import java.util.Map;
 /**
  * Use for create and setting criteria for T.
  */
-public class CriteriaBuilder<T> {
-    private static final Logger LOGGER = Logger.getLogger(CriteriaBuilder.class);
+public class CriteriaQueryBuilder<T> {
+    private static final Logger LOGGER = Logger.getLogger(CriteriaQueryBuilder.class);
     private final Class<T> classT;
     private final Map<String, ParameterCriteria> mapCriteria = new HashMap<>();
 
 
-    CriteriaBuilder(Class<T> classT) {
+    CriteriaQueryBuilder(Class<T> classT) {
         this.classT = classT;
     }
 
@@ -59,17 +59,17 @@ public class CriteriaBuilder<T> {
     }
 
 
-    public CriteriaQuery<T> createCriteria(javax.persistence.criteria.CriteriaBuilder criteriaBuilder) {
+    public CriteriaQuery<T> createCriteriaQuery(javax.persistence.criteria.CriteriaBuilder criteriaBuilder) {
 
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classT);
         Root<T> layoutRoot = criteriaQuery.from(classT);
         criteriaQuery.select(layoutRoot);
 
-        LOGGER.info("createCriteria: mapCriteria = " + mapCriteria);
+        LOGGER.info("createCriteriaQuery: mapCriteria = " + mapCriteria);
         for (String key : mapCriteria.keySet()) {
             ParameterCriteria param = mapCriteria.get(key);
             if (param.isUseInCriteria()) continue;
-            LOGGER.debug("createCriteria: add parameter " + param.name + " = " + param.getName());
+            LOGGER.debug("createCriteriaQuery: add parameter " + param.name + " = " + param.getName());
             Path<Object> nameParameter = layoutRoot.get(key);
             Object value = param.getValue();
 
@@ -81,7 +81,7 @@ public class CriteriaBuilder<T> {
 
     @Override
     public String toString() {
-        return "CriteriaBuilder{" +
+        return "CriteriaQueryBuilder{" +
                 "classT=" + classT +
                 ", mapCriteria=" + mapCriteria +
                 '}';

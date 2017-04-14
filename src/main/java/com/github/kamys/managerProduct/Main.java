@@ -2,8 +2,8 @@ package com.github.kamys.managerProduct;
 
 import com.github.kamys.managerProduct.data.managers.Manager;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
-import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilder;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilderFactory;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaQueryBuilder;
 import com.github.kamys.managerProduct.logic.layout.Attribute;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
@@ -48,11 +48,11 @@ public class Main {
         layout.setId(1);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaBuilder<Layout> criteriaBuilder = factory.createLayout(layout);
-        criteriaBuilder.setUseInCriteria("id", false);
-        criteriaBuilder.setUseInCriteria("name", true);
+        CriteriaQueryBuilder<Layout> criteriaQueryBuilder = factory.createLayout(layout);
+        criteriaQueryBuilder.setUseInCriteria("id", false);
+        criteriaQueryBuilder.setUseInCriteria("name", true);
 
-        Collection<Layout> select = manager.select(criteriaBuilder);
+        Collection<Layout> select = manager.select(criteriaQueryBuilder);
         LOGGER.info("Select = " + select);
         manager.close();
     }

@@ -1,7 +1,7 @@
 package com.github.kamys.managerProduct.data.managers;
 
 import com.github.kamys.managerProduct.data.HibernateManager;
-import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilder;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaQueryBuilder;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -32,19 +32,19 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public void update(CriteriaBuilder<Layout> criteriaBuilder, Layout layout) {
+    public void update(CriteriaQueryBuilder<Layout> criteriaQueryBuilder, Layout layout) {
     }
 
     @Override
-    public Collection<Layout> delete(CriteriaBuilder<Layout> criteriaBuilder) {
+    public Collection<Layout> delete(CriteriaQueryBuilder<Layout> criteriaQueryBuilder) {
         return null;
     }
 
     @Override
-    public Collection<Layout> select(CriteriaBuilder<Layout> builderCriteria) {
+    public Collection<Layout> select(CriteriaQueryBuilder<Layout> builderCriteria) {
         LOGGER.info("select:" + builderCriteria);
         javax.persistence.criteria.CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Layout> criteria = builderCriteria.createCriteria(criteriaBuilder);
+        CriteriaQuery<Layout> criteria = builderCriteria.createCriteriaQuery(criteriaBuilder);
         return entityManager.createQuery(criteria).getResultList();
     }
 
