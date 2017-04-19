@@ -1,6 +1,7 @@
 package com.github.kamys.managerProduct.data.managers;
 
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaQueryBuilder;
+import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
 
 import java.util.Collection;
 
@@ -21,14 +22,15 @@ public interface Manager<T> {
      * Use for update T in database.
      *
      * @param criteriaQueryBuilder contains parameters for finding T and update him.
-     * @param newT  replacement is for found is T.
+     * @param newParameters        replacement is for found is T.
      */
-    void update(CriteriaQueryBuilder<T> criteriaQueryBuilder, T newT);
+    void update(CriteriaQueryBuilder<T> criteriaQueryBuilder, Parameters newParameters);
 
     /**
      * Use for delete T.
      *
      * @param criteriaQueryBuilder contains parameters for finding T and delete him
+     * @return T is delete.
      */
     Collection<T> delete(CriteriaQueryBuilder<T> criteriaQueryBuilder);
 

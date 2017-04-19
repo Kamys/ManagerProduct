@@ -4,6 +4,8 @@ import com.github.kamys.managerProduct.data.managers.Manager;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilderFactory;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaQueryBuilder;
+import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
+import com.github.kamys.managerProduct.data.managers.criteria.ParametersFactory;
 import com.github.kamys.managerProduct.logic.layout.Attribute;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
@@ -16,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
         LOGGER.info("Hello world!");
-        select();
+        update();
     }
 
     private static void save() {
@@ -48,11 +50,31 @@ public class Main {
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
         CriteriaQueryBuilder<Layout> criteriaQueryBuilder = factory.createLayout(layout);
-        criteriaQueryBuilder.setUseInCriteria("id", false);
-        criteriaQueryBuilder.setUseInCriteria("name", true);
+
+        Parameters parameters = criteriaQueryBuilder.getParameters();
+        parameters.setUseForSelect("id", false);
+        parameters.setUseForSelect("name", true);
 
         Collection<Layout> select = manager.select(criteriaQueryBuilder);
         LOGGER.info("Select = " + select);
+        manager.close();
+    }
+
+    private static void update() {
+        Manager<Layout> manager = new ManagerLayout();
+
+        Layout layout = new Layout();
+        layout.setName(null);
+        layout.setId(2);
+
+        CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
+        CriteriaQueryBuilder<Layout> criteriaQueryBuilder = factory.createLayout(layout);
+        criteriaQueryBuilder.getParameters().setUseForSelect("id", true);
+
+        ParametersFactory parametersFactory = new ParametersFactory();
+        Parameters newParameters = parametersFactory.createCriteriaManagerLayout(new Layout("Кифир"));
+        newParameters.setUseForUpdate("name", true);
+        manager.update(criteriaQueryBuilder, newParameters);
         manager.close();
     }
 

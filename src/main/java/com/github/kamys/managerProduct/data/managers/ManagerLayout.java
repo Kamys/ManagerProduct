@@ -2,13 +2,16 @@ package com.github.kamys.managerProduct.data.managers;
 
 import com.github.kamys.managerProduct.data.HibernateManager;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaQueryBuilder;
+import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
 import com.github.kamys.managerProduct.logic.layout.Layout;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import java.util.Collection;
 
 /**
@@ -32,7 +35,13 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public void update(CriteriaQueryBuilder<Layout> criteriaQueryBuilder, Layout layout) {
+    public void update(CriteriaQueryBuilder<Layout> builderCriteria, Parameters newParameters) {
+        LOGGER.info("update:" + builderCriteria);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaUpdate<Layout> criteriaUpdate = builderCriteria
+                .createCriteriaUpdate(criteriaBuilder, newParameters);
+        entityManager.createQuery(criteriaUpdate).executeUpdate();
     }
 
     @Override
@@ -44,7 +53,7 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     public Collection<Layout> select(CriteriaQueryBuilder<Layout> builderCriteria) {
         LOGGER.info("select:" + builderCriteria);
         javax.persistence.criteria.CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Layout> criteria = builderCriteria.createCriteriaQuery(criteriaBuilder);
+        CriteriaQuery<Layout> criteria = builderCriteria.createCriteriaSelect(criteriaBuilder);
         return entityManager.createQuery(criteria).getResultList();
     }
 

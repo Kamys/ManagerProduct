@@ -2,12 +2,8 @@ package com.github.kamys.managerProduct.data.managers.criteria;
 
 import org.apache.log4j.Logger;
 
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,137 +13,74 @@ import java.util.Map;
 public class CriteriaQueryBuilder<T> {
     private static final Logger LOGGER = Logger.getLogger(CriteriaQueryBuilder.class);
     private final Class<T> classT;
-    private final Map<String, ParameterCriteria> mapCriteria = new HashMap<>();
+    private final Parameters parameters;
 
-
-    CriteriaQueryBuilder(Class<T> classT) {
+    CriteriaQueryBuilder(Class<T> classT, Parameters parameters) {
         this.classT = classT;
+        this.parameters = parameters;
     }
 
-    /**
-     * Use not one parameter in criteria.
-     */
-    public void removeUseInCriteriAll() {
-        for (ParameterCriteria parameterCriteria : mapCriteria.values()) {
-            parameterCriteria.setUseInCriteria(false);
-        }
+    public Parameters getParameters() {
+        return parameters;
     }
 
-    /**
-     * Use all parameter in criteria.
-     */
-    public void useInCriteriaAll() {
-        for (ParameterCriteria parameterCriteria : mapCriteria.values()) {
-            parameterCriteria.setUseInCriteria(true);
-        }
-    }
-
-    void addParameter(String name, Object value) {
-        mapCriteria.put(name, new ParameterCriteria(name, value, true));
-    }
-
-    public void removeParameter(String name) {
-        mapCriteria.remove(name);
-    }
-
-    /**
-     * If set false, parameter ignored in criteria.
-     *
-     * @param name          need for found parameter.
-     * @param useInCriteria If set false, parameter ignored in criteria.
-     */
-    public void setUseInCriteria(String name, boolean useInCriteria) {
-        mapCriteria.get(name).setUseInCriteria(useInCriteria);
-    }
-
-
-    public CriteriaQuery<T> createCriteriaQuery(javax.persistence.criteria.CriteriaBuilder criteriaBuilder) {
+    public CriteriaQuery<T> createCriteriaSelect(CriteriaBuilder criteriaBuilder) {
 
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classT);
         Root<T> layoutRoot = criteriaQuery.from(classT);
         criteriaQuery.select(layoutRoot);
 
-        Map<String, ParameterCriteria> mapCriteria = sortingParameterForCriteria();
-        LOGGER.info("createCriteriaQuery: mapCriteria = " + mapCriteria);
-        List<Predicate> predicates = new ArrayList<>();
-        for (String key : mapCriteria.keySet()) {
-            ParameterCriteria param = mapCriteria.get(key);
-            Object value = param.getValue();
-            LOGGER.debug("createCriteriaQuery: add parameter " + param.getName() + " = " + value);
+        Map<String, Parameters.Parameter> mapParameterForSelect
+                = parameters.sortParameterForSelect();
 
-            Path<Object> nameParameter = layoutRoot.get(key);
-            predicates.add(criteriaBuilder.equal(nameParameter, value));
-        }
+        LOGGER.info("createCriteriaSelect: mapCriteria = " + mapParameterForSelect);
+
+        List<Predicate> predicates = createPredicates(criteriaBuilder, layoutRoot);
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
+
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
         return criteriaQuery;
     }
 
-    private Map<String, ParameterCriteria> sortingParameterForCriteria() {
-        Map<String, ParameterCriteria> criteriaMap = new HashMap<>();
-        criteriaMap.putAll(mapCriteria);
-        criteriaMap.values().removeIf(next -> !next.isUseInCriteria() || next.getValue() == null);
-        return criteriaMap;
+    public CriteriaUpdate<T> createCriteriaUpdate(CriteriaBuilder criteriaBuilder, Parameters manager) {
+        CriteriaUpdate<T> update = criteriaBuilder.createCriteriaUpdate(classT);
+        Root<T> layoutRoot = update.from(classT);
+
+        List<Predicate> predicates = createPredicates(criteriaBuilder, layoutRoot);
+        update.where(predicates.toArray(new Predicate[]{}));
+
+        Map<String, Parameters.Parameter> mapParameterForUpdate
+                = manager.sortParameterForUpdate();
+        for (String key : mapParameterForUpdate.keySet()) {
+            Parameters.Parameter param = mapParameterForUpdate.get(key);
+            Object value = param.getValue();
+            Path<Object> nameParameter = layoutRoot.get(key);
+            LOGGER.debug("createCriteriaUpdate: Update set = " + nameParameter + " value = " + value);
+            update.set(nameParameter, value);
+        }
+
+        return update;
     }
+
+    private List<Predicate> createPredicates(CriteriaBuilder criteriaBuilder, Root<T> layoutRoot) {
+        LOGGER.debug("createPredicates()");
+        List<Predicate> predicates = new ArrayList<>();
+        Map<String, Parameters.Parameter> mapCriteria = parameters.sortParameterForSelect();
+        for (String key : mapCriteria.keySet()) {
+            Parameters.Parameter param = mapCriteria.get(key);
+            Object value = param.getValue();
+            LOGGER.debug("  add parameter " + param.getName() + " = " + value);
+            Path<Object> nameParameter = layoutRoot.get(key);
+            predicates.add(criteriaBuilder.equal(nameParameter, value));
+        }
+        return predicates;
+    }
+
 
     @Override
     public String toString() {
         return "CriteriaQueryBuilder{" +
                 "classT=" + classT +
-                ", mapCriteria=" + mapCriteria +
                 '}';
-    }
-
-    private class ParameterCriteria {
-        /**
-         * Name parameter.
-         */
-        private String name;
-        /**
-         * Value parameter.
-         */
-        private Object value;
-        /**
-         * If set false, parameter ignored in criteria.
-         */
-        private boolean useInCriteria;
-
-        private ParameterCriteria(String name, Object value, boolean useInCriteria) {
-            this.name = name;
-            this.value = value;
-            this.useInCriteria = useInCriteria;
-        }
-
-        private String getName() {
-            return name;
-        }
-
-        private void setName(String name) {
-            this.name = name;
-        }
-
-        private Object getValue() {
-            return value;
-        }
-
-        private void setValue(Object value) {
-            this.value = value;
-        }
-
-        private boolean isUseInCriteria() {
-            return useInCriteria;
-        }
-
-        private void setUseInCriteria(boolean useInCriteria) {
-            this.useInCriteria = useInCriteria;
-        }
-
-        @Override
-        public String toString() {
-            return "ParameterCriteria{" +
-                    "name='" + name + '\'' +
-                    ", value=" + value +
-                    ", useInCriteria=" + useInCriteria +
-                    '}';
-        }
     }
 }
