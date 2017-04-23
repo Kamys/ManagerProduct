@@ -3,7 +3,7 @@ package com.github.kamys.managerProduct;
 import com.github.kamys.managerProduct.data.managers.Manager;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilderFactory;
-import com.github.kamys.managerProduct.data.managers.criteria.CriteriaQueryBuilder;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaHelper;
 import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
 import com.github.kamys.managerProduct.data.managers.criteria.ParametersFactory;
 import com.github.kamys.managerProduct.logic.layout.Attribute;
@@ -17,6 +17,10 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
+        update();
+    }
+
+    private static void delete() {
         Manager<Layout> manager = new ManagerLayout();
 
         Layout layout = new Layout();
@@ -24,7 +28,7 @@ public class Main {
         layout.setId(2);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaQueryBuilder<Layout> criteria = factory.createLayout(layout);
+        CriteriaHelper<Layout> criteria = factory.createLayout(layout);
 
         Parameters parameters = criteria.getParameters();
         parameters.setUseForSelect("id", false);
@@ -61,13 +65,13 @@ public class Main {
         layout.setId(2);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaQueryBuilder<Layout> criteriaQueryBuilder = factory.createLayout(layout);
+        CriteriaHelper<Layout> criteriaHelper = factory.createLayout(layout);
 
-        Parameters parameters = criteriaQueryBuilder.getParameters();
+        Parameters parameters = criteriaHelper.getParameters();
         parameters.setUseForSelect("id", false);
         parameters.setUseForSelect("name", true);
 
-        Collection<Layout> select = manager.select(criteriaQueryBuilder);
+        Collection<Layout> select = manager.select(criteriaHelper);
         LOGGER.info("Select = " + select);
         manager.close();
     }
@@ -75,18 +79,18 @@ public class Main {
     private static void update() {
         Manager<Layout> manager = new ManagerLayout();
 
-        Layout layout = new Layout();
-        layout.setName(null);
-        layout.setId(2);
+        Layout layoutForFind = new Layout();
+        layoutForFind.setName(null);
+        layoutForFind.setId(4);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaQueryBuilder<Layout> criteriaQueryBuilder = factory.createLayout(layout);
-        criteriaQueryBuilder.getParameters().setUseForSelect("id", true);
+        CriteriaHelper<Layout> criteriaHelper = factory.createLayout(layoutForFind);
+        criteriaHelper.getParameters().setUseForSelect("id", true);
 
         ParametersFactory parametersFactory = new ParametersFactory();
         Parameters newParameters = parametersFactory.createCriteriaManagerLayout(new Layout("Кифир"));
         newParameters.setUseForUpdate("name", true);
-        manager.update(criteriaQueryBuilder, newParameters);
+        manager.update(criteriaHelper, newParameters);
         manager.close();
     }
 

@@ -10,12 +10,12 @@ import java.util.Map;
 /**
  * Use for create and setting criteria for T.
  */
-public class CriteriaQueryBuilder<T> {
-    private static final Logger LOGGER = Logger.getLogger(CriteriaQueryBuilder.class);
+public class CriteriaHelper<T> {
+    private static final Logger LOGGER = Logger.getLogger(CriteriaHelper.class);
     private final Class<T> classT;
     private final Parameters parameters;
 
-    CriteriaQueryBuilder(Class<T> classT, Parameters parameters) {
+    CriteriaHelper(Class<T> classT, Parameters parameters) {
         this.classT = classT;
         this.parameters = parameters;
     }
@@ -46,13 +46,23 @@ public class CriteriaQueryBuilder<T> {
         CriteriaUpdate<T> update = criteriaBuilder.createCriteriaUpdate(classT);
         Root<T> layoutRoot = update.from(classT);
 
-
         List<Predicate> predicates = createPredicates(criteriaBuilder, layoutRoot);
         update.where(predicates.toArray(new Predicate[]{}));
 
         putParametersInUpdate(manager, update, layoutRoot);
 
         return update;
+    }
+
+    public CriteriaDelete<T> createCriteriaDelete(CriteriaBuilder builder) {
+        CriteriaDelete<T> delete = builder.createCriteriaDelete(classT);
+        Root<T> layoutRoot = delete.from(classT);
+
+
+        List<Predicate> predicates = createPredicates(builder, layoutRoot);
+        delete.where(predicates.toArray(new Predicate[]{}));
+
+        return delete;
     }
 
     private void putParametersInUpdate(Parameters manager, CriteriaUpdate<T> update, Root<T> layoutRoot) {
@@ -67,6 +77,7 @@ public class CriteriaQueryBuilder<T> {
             update.set(nameParameter, value);
         }
     }
+
 
     private List<Predicate> createPredicates(CriteriaBuilder criteriaBuilder, Root<T> layoutRoot) {
         LOGGER.debug("createPredicates()");
@@ -85,7 +96,7 @@ public class CriteriaQueryBuilder<T> {
 
     @Override
     public String toString() {
-        return "CriteriaQueryBuilder{" +
+        return "CriteriaHelper{" +
                 "classT=" + classT +
                 '}';
     }
