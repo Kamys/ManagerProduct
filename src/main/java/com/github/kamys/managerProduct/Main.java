@@ -17,8 +17,20 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        LOGGER.info("Hello world!");
-        update();
+        Manager<Layout> manager = new ManagerLayout();
+
+        Layout layout = new Layout();
+        layout.setName("Мясо");
+        layout.setId(2);
+
+        CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
+        CriteriaQueryBuilder<Layout> criteria = factory.createLayout(layout);
+
+        Parameters parameters = criteria.getParameters();
+        parameters.setUseForSelect("id", false);
+        parameters.setUseForSelect("name", true);
+
+        manager.delete(criteria);
     }
 
     private static void save() {

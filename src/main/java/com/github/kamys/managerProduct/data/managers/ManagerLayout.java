@@ -9,9 +9,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.*;
 import java.util.Collection;
 
 /**
@@ -39,13 +37,34 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
         LOGGER.info("update:" + builderCriteria);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        CriteriaUpdate<Layout> criteriaUpdate = builderCriteria
-                .createCriteriaUpdate(criteriaBuilder, newParameters);
-        entityManager.createQuery(criteriaUpdate).executeUpdate();
+        CriteriaUpdate<Layout> update = criteriaBuilder.
+                createCriteriaUpdate(Layout.class);
+        Root<Layout> root = update.from(Layout.class);
+        update.set("name", "Кифир");
+
+        update.where(criteriaBuilder.greaterThanOrEqualTo(root.get("id"), 2));
+        entityManager.createQuery(update).executeUpdate();
     }
 
     @Override
     public Collection<Layout> delete(CriteriaQueryBuilder<Layout> criteriaQueryBuilder) {
+        LOGGER.info("Delete: criteriaQueryBuilder = " + criteriaQueryBuilder);
+        Transaction tr = null;
+        try (Session session = factory.openSession()) {
+            tr = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaDelete<Layout> delete = builder.createCriteriaDelete(Layout.class);
+            Root<Layout> root = delete.from(Layout.class);
+
+            delete.where(builder.equal(root.get("id"), 2));
+            session.createQuery(delete).executeUpdate();
+            tr.commit();
+
+        } catch (HibernateException e) {
+            if (tr != null) tr.rollback();
+            LOGGER.warn(e);
+        }
+        LOGGER.debug("delete: stope");
         return null;
     }
 

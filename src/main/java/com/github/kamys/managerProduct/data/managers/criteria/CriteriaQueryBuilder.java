@@ -46,20 +46,26 @@ public class CriteriaQueryBuilder<T> {
         CriteriaUpdate<T> update = criteriaBuilder.createCriteriaUpdate(classT);
         Root<T> layoutRoot = update.from(classT);
 
+
         List<Predicate> predicates = createPredicates(criteriaBuilder, layoutRoot);
         update.where(predicates.toArray(new Predicate[]{}));
 
+        putParametersInUpdate(manager, update, layoutRoot);
+
+        return update;
+    }
+
+    private void putParametersInUpdate(Parameters manager, CriteriaUpdate<T> update, Root<T> layoutRoot) {
         Map<String, Parameters.Parameter> mapParameterForUpdate
                 = manager.sortParameterForUpdate();
+        LOGGER.debug("createCriteriaUpdate: set parameter for Update:");
         for (String key : mapParameterForUpdate.keySet()) {
             Parameters.Parameter param = mapParameterForUpdate.get(key);
             Object value = param.getValue();
             Path<Object> nameParameter = layoutRoot.get(key);
-            LOGGER.debug("createCriteriaUpdate: Update set = " + nameParameter + " value = " + value);
+            LOGGER.debug("  set name = " + param.getName() + " value = " + value);
             update.set(nameParameter, value);
         }
-
-        return update;
     }
 
     private List<Predicate> createPredicates(CriteriaBuilder criteriaBuilder, Root<T> layoutRoot) {
