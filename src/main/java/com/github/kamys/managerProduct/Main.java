@@ -17,7 +17,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        update();
+        select();
     }
 
     private static void delete() {

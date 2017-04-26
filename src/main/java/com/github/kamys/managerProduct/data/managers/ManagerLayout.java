@@ -8,12 +8,14 @@ import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Need for management Attribute.
@@ -80,11 +82,26 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public Collection<Layout> select(CriteriaHelper<Layout> builderCriteria) {
-        LOGGER.info("select:" + builderCriteria);
-        javax.persistence.criteria.CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Layout> criteria = builderCriteria.createCriteriaSelect(criteriaBuilder);
-        return entityManager.createQuery(criteria).getResultList();
+    public Collection<Layout> select(CriteriaHelper<Layout> criteriaHelper) {
+        LOGGER.info("select: criteriaHelper = " + criteriaHelper);
+        Transaction tr = null;
+        try (Session session = factory.openSession()) {
+            tr = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+
+            CriteriaQuery<Layout> select = criteriaHelper
+                    .createCriteriaSelect(builder);
+
+
+            Query<Layout> query = session.createQuery(select);
+            List<Layout> resultList = query.getResultList();
+            tr.commit();
+            return resultList;
+        } catch (HibernateException e) {
+            if (tr != null) tr.rollback();
+            LOGGER.warn(e);
+            throw e;
+        }
     }
 
     @Override
