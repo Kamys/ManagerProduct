@@ -20,7 +20,7 @@
     </appender>
 
     <logger name="com.github.kamys">
-        <level value="DEBUG"/>
+        <level value="trace"/>
         <appender-ref ref="Console"/>
     </logger>
 

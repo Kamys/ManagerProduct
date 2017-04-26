@@ -3,7 +3,9 @@ package com.github.kamys.managerProduct.data.managers.criteria;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Predicate;
 
 //TODO: add entityManager.getMetamodel() for check key in mapCriteria.
 
@@ -11,8 +13,8 @@ import java.util.Map;
  * Use for work white {@link Parameter}.
  */
 public class Parameters {
-    private final Map<String, Parameter> mapCriteria = new HashMap<>();
     private static final Logger LOGGER = Logger.getLogger(Parameters.class);
+    private final Map<String, Parameter> mapCriteria = new HashMap<>();
 
     void addParameter(String name, Object value) {
         mapCriteria.put(name, new Parameter(name, value, true));
@@ -57,18 +59,40 @@ public class Parameters {
     }
 
     Map<String, Parameter> sortParameterForSelect() {
-        Map<String, Parameter> sortingMap = new HashMap<>();
-        sortingMap.putAll(mapCriteria);
-        sortingMap.values().removeIf(next -> !next.isUseForSelect() || next.getValue() == null);
-        return sortingMap;
+        LOGGER.info("sortParameterForSelect()");
+        return sortParameter(next -> {
+            boolean checkValue = next.getValue() == null;
+            return !next.isUseForSelect() || checkValue;
+        });
     }
 
     Map<String, Parameter> sortParameterForUpdate() {
+        LOGGER.info("sortParameterForUpdate()");
+        return sortParameter(next -> {
+            boolean checkValue = next.getValue() == null;
+            return !next.isUseForUpdate() || checkValue;
+        });
+    }
+
+    /**
+     * Sorting mapCriteria. For check parameter use method test from {@link Predicate}.
+     *
+     * @param predicate For check parameter.
+     * @return Sorting mapCriteria.
+     */
+    private Map<String, Parameter> sortParameter(Predicate<Parameter> predicate) {
         Map<String, Parameter> sortingMap = new HashMap<>();
-        LOGGER.debug("sortParameterForUpdate: " + mapCriteria);
         sortingMap.putAll(mapCriteria);
-        sortingMap.values().removeIf(next -> !next.isUseForUpdate() || next.getValue() == null);
-        LOGGER.debug("sortParameterForUpdate: return" + sortingMap);
+        LOGGER.debug("sortParameter: " + sortingMap);
+        Iterator<Parameter> iterator = sortingMap.values().iterator();
+        while (iterator.hasNext()) {
+            Parameter next = iterator.next();
+            if (predicate.test(next)) {
+                LOGGER.trace(" remove " + next);
+                iterator.remove();
+            }
+        }
+        LOGGER.debug("sortParameter: return" + sortingMap);
         return sortingMap;
     }
 

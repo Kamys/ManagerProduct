@@ -17,7 +17,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        select();
+        update();
     }
 
     private static void delete() {
@@ -61,7 +61,7 @@ public class Main {
 
 
         Layout layout = new Layout();
-        layout.setName(null);
+        layout.setName("Пельмешки");
         layout.setId(2);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
@@ -88,7 +88,7 @@ public class Main {
         criteriaHelper.getParameters().setUseForSelect("id", true);
 
         ParametersFactory parametersFactory = new ParametersFactory();
-        Parameters newParameters = parametersFactory.createCriteriaManagerLayout(new Layout("Кифир"));
+        Parameters newParameters = parametersFactory.createCriteriaManagerLayout(new Layout("Банан"));
         newParameters.setUseForUpdate("name", true);
         manager.update(criteriaHelper, newParameters);
         manager.close();

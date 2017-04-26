@@ -30,14 +30,7 @@ public class CriteriaHelper<T> {
         Root<T> layoutRoot = criteriaQuery.from(classT);
         criteriaQuery.select(layoutRoot);
 
-        Map<String, Parameters.Parameter> mapParameterForSelect
-                = parameters.sortParameterForSelect();
-
-        LOGGER.info("createCriteriaSelect: mapCriteria = " + mapParameterForSelect);
-
         List<Predicate> predicates = createPredicates(criteriaBuilder, layoutRoot);
-        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
-
         criteriaQuery.where(predicates.toArray(new Predicate[]{}));
         return criteriaQuery;
     }
@@ -79,6 +72,15 @@ public class CriteriaHelper<T> {
     }
 
 
+    //TODO write doc.
+
+    /**
+     * Use for create predicates for criteria.
+     *
+     * @param criteriaBuilder --
+     * @param layoutRoot      --
+     * @return List parameter when need for criteria.
+     */
     private List<Predicate> createPredicates(CriteriaBuilder criteriaBuilder, Root<T> layoutRoot) {
         LOGGER.debug("createPredicates()");
         List<Predicate> predicates = new ArrayList<>();
@@ -86,7 +88,6 @@ public class CriteriaHelper<T> {
         for (String key : mapCriteria.keySet()) {
             Parameters.Parameter param = mapCriteria.get(key);
             Object value = param.getValue();
-            LOGGER.debug("  add parameter " + param.getName() + " = " + value);
             Path<Object> nameParameter = layoutRoot.get(key);
             predicates.add(criteriaBuilder.equal(nameParameter, value));
         }
