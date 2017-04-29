@@ -64,11 +64,10 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
         Transaction tr = null;
         try (Session session = factory.openSession()) {
             tr = session.beginTransaction();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
 
+            CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaDelete<Layout> delete = criteriaHelper
                     .createCriteriaDelete(builder);
-
 
             session.createQuery(delete).executeUpdate();
             tr.commit();
@@ -87,11 +86,10 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
         Transaction tr = null;
         try (Session session = factory.openSession()) {
             tr = session.beginTransaction();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
 
+            CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Layout> select = criteriaHelper
                     .createCriteriaSelect(builder);
-
 
             Query<Layout> query = session.createQuery(select);
             List<Layout> resultList = query.getResultList();
@@ -106,7 +104,23 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
 
     @Override
     public Collection<Layout> selectAll() {
-        return null;
+        Transaction tr = null;
+        try (Session session = factory.openSession()) {
+            LOGGER.info("selectAll()");
+            tr = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+
+            CriteriaQuery<Layout> criteria = builder.createQuery(Layout.class);
+            criteria.from(Layout.class);
+            Query<Layout> query = session.createQuery(criteria);
+            List<Layout> result = query.list();
+            LOGGER.info("selectAll: return = " + result);
+            return result;
+        } catch (HibernateException e) {
+            if (tr != null) tr.rollback();
+            LOGGER.warn(e);
+            throw e;
+        }
     }
 
     @Override

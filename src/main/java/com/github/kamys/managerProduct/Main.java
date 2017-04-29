@@ -17,7 +17,12 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        update();
+        Manager<Layout> manager = new ManagerLayout();
+
+        Collection<Layout> layouts = manager.selectAll();
+        for (Layout layout : layouts) {
+            LOGGER.info(layout);
+        }
     }
 
     private static void delete() {
