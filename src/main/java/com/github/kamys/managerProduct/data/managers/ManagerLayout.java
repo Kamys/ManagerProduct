@@ -103,10 +103,10 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public Collection<Layout> selectAll() {
+    public Collection<Layout> getAll() {
         Transaction tr = null;
         try (Session session = factory.openSession()) {
-            LOGGER.info("selectAll()");
+            LOGGER.info("getAll()");
             tr = session.beginTransaction();
             CriteriaBuilder builder = session.getCriteriaBuilder();
 
@@ -114,7 +114,7 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
             criteria.from(Layout.class);
             Query<Layout> query = session.createQuery(criteria);
             List<Layout> result = query.list();
-            LOGGER.info("selectAll: return = " + result);
+            LOGGER.info("getAll: return = " + result);
             return result;
         } catch (HibernateException e) {
             if (tr != null) tr.rollback();

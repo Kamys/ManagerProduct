@@ -51,10 +51,11 @@
             <version>${mockito-core.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.tngtech.java</groupId>
-            <artifactId>junit-dataprovider</artifactId>
-            <version>${junit-dataprovider.version}</version>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.5.3</version>
         </dependency>
+
 
         <!--For logging-->
         <dependency>
@@ -62,6 +63,13 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

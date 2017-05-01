@@ -17,12 +17,17 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
+        selectAll();
+    }
+
+    private static void selectAll() {
         Manager<Layout> manager = new ManagerLayout();
 
-        Collection<Layout> layouts = manager.selectAll();
+        Collection<Layout> layouts = manager.getAll();
         for (Layout layout : layouts) {
             LOGGER.info(layout);
         }
+        manager.close();
     }
 
     private static void delete() {
@@ -40,6 +45,7 @@ public class Main {
         parameters.setUseForSelect("name", true);
 
         manager.delete(criteria);
+        manager.close();
     }
 
     private static void save() {

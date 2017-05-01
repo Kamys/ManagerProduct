@@ -47,7 +47,7 @@ public interface Manager<T> {
      *
      * @return all T.
      */
-    Collection<T> selectAll();
+    Collection<T> getAll();
 
     /**
      * Use for complete operation.
