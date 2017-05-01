@@ -38,7 +38,7 @@ public class Main {
         layout.setId(2);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaHelper<Layout> criteria = factory.createLayout(layout);
+        CriteriaHelper<Layout> criteria = factory.createCriteriaForLayout(layout);
 
         Parameters parameters = criteria.getParameters();
         parameters.setUseForSelect("id", false);
@@ -76,7 +76,7 @@ public class Main {
         layout.setId(2);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaHelper<Layout> criteriaHelper = factory.createLayout(layout);
+        CriteriaHelper<Layout> criteriaHelper = factory.createCriteriaForLayout(layout);
 
         Parameters parameters = criteriaHelper.getParameters();
         parameters.setUseForSelect("id", false);
@@ -95,7 +95,7 @@ public class Main {
         layoutForFind.setId(4);
 
         CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaHelper<Layout> criteriaHelper = factory.createLayout(layoutForFind);
+        CriteriaHelper<Layout> criteriaHelper = factory.createCriteriaForLayout(layoutForFind);
         criteriaHelper.getParameters().setUseForSelect("id", true);
 
         ParametersFactory parametersFactory = new ParametersFactory();

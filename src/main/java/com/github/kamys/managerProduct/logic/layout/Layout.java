@@ -46,6 +46,7 @@ public class Layout {
         this.name = name;
     }
 
+
     public List<Attribute> getAttributeList() {
         return attributes;
     }

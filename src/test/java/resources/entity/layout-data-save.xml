@@ -2,4 +2,5 @@
 <dataset>
     <layouts id="1" name="Молоко"/>
     <layouts id="2" name="Кифир"/>
+    <layouts id="3" name="Мёд"/>
 </dataset>

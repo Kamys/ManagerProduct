@@ -2,23 +2,22 @@ package com.github.kamys.managerProduct.logic.layout;
 
 import com.github.kamys.managerProduct.config.DBUnitConfig;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
+import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
 import org.dbunit.Assertion;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.Collection;
-
-import static org.dbunit.Assertion.assertEqualsIgnoreCols;
 
 
 public class LayoutTestDB extends DBUnitConfig {
     private ManagerLayout service = new ManagerLayout();
-    //private EntityManager em = Persistence.createEntityManagerFactory("DBUnitEx").createEntityManager();
 
     @Before
     public void setUp() throws Exception {
+
+
         beforeData = new FlatXmlDataSetBuilder().build(
                 Thread.currentThread().getContextClassLoader()
                         .getResourceAsStream("entity/layout-data.xml"));
@@ -46,20 +45,37 @@ public class LayoutTestDB extends DBUnitConfig {
         assertEquals(rowCount, layouts.size());
     }
 
-    @Test
-    public void save() throws Exception {
-        Layout person = new Layout();
-        person.setName("Мёд");
-
-        service.save(person);
+    public void testSave() throws Exception {
+        Layout honey = createLayout();
+        service.save(honey);
 
         IDataSet expectedData = new FlatXmlDataSetBuilder().build(
                 Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("com/devcolibri/entity/person/layout-data-save.xml"));
+                        .getResourceAsStream("entity/layout-data-save.xml"));
 
         IDataSet actualData = tester.getConnection().createDataSet();
 
-        String[] ignore = {"id"};
-        assertEqualsIgnoreCols(expectedData, actualData, "person", ignore);
+        Assertion.assertEquals(expectedData, actualData);
+    }
+
+    private Layout createLayout() {
+        Layout honey = new Layout();
+        honey.setName("Мёд");
+        honey.setId(3);
+        return honey;
+    }
+
+    public void testUpdate() throws Exception {
+        Layout layout = createLayout();
+        Parameters newParameters = new Parameters();
+        service.update(criteriaHelper, newParameters);
+
+        IDataSet expectedData = new FlatXmlDataSetBuilder().build(
+                Thread.currentThread().getContextClassLoader()
+                        .getResourceAsStream("entity/layout-data-save.xml"));
+
+        IDataSet actualData = tester.getConnection().createDataSet();
+
+        Assertion.assertEquals(expectedData, actualData);
     }
 }
