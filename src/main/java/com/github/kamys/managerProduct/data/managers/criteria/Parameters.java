@@ -17,7 +17,7 @@ public class Parameters {
     private final Map<String, Parameter> mapCriteria = new HashMap<>();
 
     void addParameter(String name, Object value) {
-        mapCriteria.put(name, new Parameter(name, value, true));
+        mapCriteria.put(name, new Parameter(name, value));
     }
 
     public void removeParameter(String name) {
@@ -112,16 +112,15 @@ public class Parameters {
         /**
          * If set false, parameter ignored for select.
          */
-        private boolean useForSelect;
+        private boolean useForSelect = false;
         /**
          * If set false, parameter ignored for update.
          */
-        private boolean useForUpdate;
+        private boolean useForUpdate = false;
 
-        private Parameter(String name, Object value, boolean useForSelect) {
+        private Parameter(String name, Object value) {
             this.name = name;
             this.value = value;
-            this.useForSelect = useForSelect;
         }
 
         boolean isUseForUpdate() {

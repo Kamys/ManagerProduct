@@ -21,10 +21,10 @@ public interface Manager<T> {
     /**
      * Use for update T in database.
      *
-     * @param criteriaHelper contains parameters for finding T and update him.
+     * @param oldParameters contains parameters for finding T and update him.
      * @param newParameters        replacement is for found is T.
      */
-    void update(CriteriaHelper<T> criteriaHelper, Parameters newParameters);
+    void update(Parameters oldParameters, Parameters newParameters);
 
     /**
      * Use for delete T.

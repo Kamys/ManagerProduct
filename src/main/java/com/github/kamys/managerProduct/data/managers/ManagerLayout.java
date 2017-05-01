@@ -1,6 +1,7 @@
 package com.github.kamys.managerProduct.data.managers;
 
 import com.github.kamys.managerProduct.data.HibernateManager;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaFactory;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaHelper;
 import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
 import com.github.kamys.managerProduct.logic.layout.Layout;
@@ -38,13 +39,14 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
     }
 
     @Override
-    public void update(CriteriaHelper<Layout> criteriaHelper, Parameters newParameters) {
-        LOGGER.info("update: criteriaHelper = " + criteriaHelper + " newParameters = " + newParameters);
+    public void update(Parameters oldParameters, Parameters newParameters) {
+        LOGGER.info("update: oldParameters = " + oldParameters + " newParameters = " + newParameters);
         Transaction tr = null;
         try (Session session = factory.openSession()) {
             tr = session.beginTransaction();
             CriteriaBuilder builder = session.getCriteriaBuilder();
 
+            CriteriaHelper<Layout> criteriaHelper = CriteriaFactory.createCriteria(oldParameters);
             CriteriaUpdate<Layout> delete = criteriaHelper
                     .createCriteriaUpdate(builder, newParameters);
 

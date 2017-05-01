@@ -17,13 +17,13 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        selectAll();
+        update();
     }
 
-    private static void selectAll() {
+    private static void getAll() {
         Manager<Layout> manager = new ManagerLayout();
 
-        Collection<Layout> layouts = manager.getAll();
+        Collection<Layout> layouts = manager.selectAll();
         for (Layout layout : layouts) {
             LOGGER.info(layout);
         }
@@ -37,8 +37,8 @@ public class Main {
         layout.setName("Мясо");
         layout.setId(2);
 
-        CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaHelper<Layout> criteria = factory.createCriteriaForLayout(layout);
+        CriteriaFactory factory = new CriteriaFactory();
+        CriteriaHelper<Layout> criteria = CriteriaFactory.createCriteria(layout);
 
         Parameters parameters = criteria.getParameters();
         parameters.setUseForSelect("id", false);
@@ -75,8 +75,8 @@ public class Main {
         layout.setName("Пельмешки");
         layout.setId(2);
 
-        CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaHelper<Layout> criteriaHelper = factory.createCriteriaForLayout(layout);
+        CriteriaFactory factory = new CriteriaFactory();
+        CriteriaHelper<Layout> criteriaHelper = CriteriaFactory.createCriteria(layout);
 
         Parameters parameters = criteriaHelper.getParameters();
         parameters.setUseForSelect("id", false);
@@ -91,17 +91,14 @@ public class Main {
         Manager<Layout> manager = new ManagerLayout();
 
         Layout layoutForFind = new Layout();
-        layoutForFind.setName(null);
-        layoutForFind.setId(4);
+        layoutForFind.setName("Ром");
 
-        CriteriaBuilderFactory factory = new CriteriaBuilderFactory();
-        CriteriaHelper<Layout> criteriaHelper = factory.createCriteriaForLayout(layoutForFind);
-        criteriaHelper.getParameters().setUseForSelect("id", true);
+        Parameters oldParameters = ParametersFactory.createParameter(layoutForFind);
+        oldParameters.setUseForSelect("name", true);
 
-        ParametersFactory parametersFactory = new ParametersFactory();
-        Parameters newParameters = parametersFactory.createCriteriaManagerLayout(new Layout("Банан"));
+        Parameters newParameters = ParametersFactory.createParameter(new Layout("Хлеб"));
         newParameters.setUseForUpdate("name", true);
-        manager.update(criteriaHelper, newParameters);
+        manager.update(oldParameters, newParameters);
         manager.close();
     }
 

@@ -6,7 +6,7 @@ import com.github.kamys.managerProduct.logic.layout.Layout;
  * Use for create and setting default {@link Parameters}.
  */
 public class ParametersFactory {
-    public Parameters createCriteriaManagerLayout(Layout layout) {
+    public static Parameters createParameter(Layout layout) {
         Parameters manager = new Parameters();
         manager.addParameter("id", layout.getId());
         manager.addParameter("name", layout.getName());
