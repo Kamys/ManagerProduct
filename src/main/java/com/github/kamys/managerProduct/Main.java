@@ -2,7 +2,7 @@ package com.github.kamys.managerProduct;
 
 import com.github.kamys.managerProduct.data.managers.Manager;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
-import com.github.kamys.managerProduct.data.managers.criteria.CriteriaBuilderFactory;
+import com.github.kamys.managerProduct.data.managers.criteria.CriteriaFactory;
 import com.github.kamys.managerProduct.data.managers.criteria.CriteriaHelper;
 import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
 import com.github.kamys.managerProduct.data.managers.criteria.ParametersFactory;
@@ -23,7 +23,7 @@ public class Main {
     private static void getAll() {
         Manager<Layout> manager = new ManagerLayout();
 
-        Collection<Layout> layouts = manager.selectAll();
+        Collection<Layout> layouts = manager.getAll();
         for (Layout layout : layouts) {
             LOGGER.info(layout);
         }
@@ -75,7 +75,6 @@ public class Main {
         layout.setName("Пельмешки");
         layout.setId(2);
 
-        CriteriaFactory factory = new CriteriaFactory();
         CriteriaHelper<Layout> criteriaHelper = CriteriaFactory.createCriteria(layout);
 
         Parameters parameters = criteriaHelper.getParameters();
@@ -91,7 +90,7 @@ public class Main {
         Manager<Layout> manager = new ManagerLayout();
 
         Layout layoutForFind = new Layout();
-        layoutForFind.setName("Ром");
+        layoutForFind.setName("Молоко");
 
         Parameters oldParameters = ParametersFactory.createParameter(layoutForFind);
         oldParameters.setUseForSelect("name", true);

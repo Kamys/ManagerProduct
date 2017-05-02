@@ -3,6 +3,7 @@ package com.github.kamys.managerProduct.logic.layout;
 import com.github.kamys.managerProduct.config.DBUnitConfig;
 import com.github.kamys.managerProduct.data.managers.ManagerLayout;
 import com.github.kamys.managerProduct.data.managers.criteria.Parameters;
+import com.github.kamys.managerProduct.data.managers.criteria.ParametersFactory;
 import org.dbunit.Assertion;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -18,9 +19,7 @@ public class LayoutTestDB extends DBUnitConfig {
     public void setUp() throws Exception {
 
 
-        beforeData = new FlatXmlDataSetBuilder().build(
-                Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("entity/layout-data.xml"));
+        beforeData = createDataSet("entity/layout-data-default.xml");
 
         super.setUp();
         tester.setDataSet(beforeData);
@@ -35,9 +34,7 @@ public class LayoutTestDB extends DBUnitConfig {
     public void testGetAll() throws Exception {
         Collection<Layout> layouts = service.getAll();
 
-        IDataSet expectedData = new FlatXmlDataSetBuilder().build(
-                Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("entity/layout-data.xml"));
+        IDataSet expectedData = createDataSet("entity/layout-data-default.xml");
 
         IDataSet actualData = tester.getConnection().createDataSet();
         Assertion.assertEquals(expectedData, actualData);
@@ -46,36 +43,58 @@ public class LayoutTestDB extends DBUnitConfig {
     }
 
     public void testSave() throws Exception {
-        Layout honey = createLayout();
+        Layout honey = createLayout("Мёд", 3);
         service.save(honey);
 
-        IDataSet expectedData = new FlatXmlDataSetBuilder().build(
-                Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("entity/layout-data-save.xml"));
-
+        IDataSet expectedData = createDataSet("entity/layout-data-save.xml");
         IDataSet actualData = tester.getConnection().createDataSet();
-
         Assertion.assertEquals(expectedData, actualData);
     }
 
-    private Layout createLayout() {
+    private static Layout createLayout(String name, int id) {
         Layout honey = new Layout();
-        honey.setName("Мёд");
-        honey.setId(3);
+        honey.setName(name);
+        honey.setId(id);
         return honey;
     }
 
-    public void testUpdate() throws Exception {
-        Layout layout = createLayout();
-        Parameters newParameters = new Parameters();
-        service.update(criteriaHelper, newParameters);
+    public void testUpdateOnName() throws Exception {
+        Layout oldLayout = createLayout("Молоко", -1);
+        Parameters oldParameter = ParametersFactory.createParameter(oldLayout);
+        oldParameter.setUseForSelect("name", true);
 
-        IDataSet expectedData = new FlatXmlDataSetBuilder().build(
-                Thread.currentThread().getContextClassLoader()
-                        .getResourceAsStream("entity/layout-data-save.xml"));
+        Layout newLayout = createLayout("Сырок", -1);
+        Parameters newParameter = ParametersFactory.createParameter(newLayout);
+        newParameter.setUseForUpdate("name", true);
+        service.update(oldParameter, newParameter);
+
+        IDataSet expectedData = createDataSet("entity/layout-data-update.xml");
 
         IDataSet actualData = tester.getConnection().createDataSet();
 
         Assertion.assertEquals(expectedData, actualData);
+    }
+
+    public void testUpdateOnId() throws Exception {
+        Layout oldLayout = createLayout("", 1);
+        Parameters oldParameter = ParametersFactory.createParameter(oldLayout);
+        oldParameter.setUseForSelect("id", true);
+
+        Layout newLayout = createLayout("Сырок", -1);
+        Parameters newParameter = ParametersFactory.createParameter(newLayout);
+        newParameter.setUseForUpdate("name", true);
+        service.update(oldParameter, newParameter);
+
+        IDataSet expectedData = createDataSet("entity/layout-data-update.xml");
+
+        IDataSet actualData = tester.getConnection().createDataSet();
+
+        Assertion.assertEquals(expectedData, actualData);
+    }
+
+    private IDataSet createDataSet(String path) throws Exception {
+        return new FlatXmlDataSetBuilder().build(
+                Thread.currentThread().getContextClassLoader()
+                        .getResourceAsStream(path));
     }
 }
