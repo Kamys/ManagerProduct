@@ -17,7 +17,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        update();
+        delete();
     }
 
     private static void getAll() {
@@ -31,27 +31,20 @@ public class Main {
     }
 
     private static void delete() {
-        Manager<Layout> manager = new ManagerLayout();
-
         Layout layout = new Layout();
-        layout.setName("Мясо");
-        layout.setId(2);
+        layout.setName("Кифир");
+        layout.setId(1);
 
-        CriteriaFactory factory = new CriteriaFactory();
-        CriteriaHelper<Layout> criteria = CriteriaFactory.createCriteria(layout);
-
-        Parameters parameters = criteria.getParameters();
+        Parameters parameters = ParametersFactory.createParameter(layout);
         parameters.setUseForSelect("id", false);
         parameters.setUseForSelect("name", true);
 
-        manager.delete(criteria);
+        Manager<Layout> manager = new ManagerLayout();
+        manager.delete(parameters);
         manager.close();
     }
 
     private static void save() {
-        Manager<Layout> manager = new ManagerLayout();
-
-
         Layout layout = new Layout();
         layout.setName("Пельмешки");
 
@@ -63,14 +56,12 @@ public class Main {
         layout.getAttributeList().add(attr1);
         layout.getAttributeList().add(attr2);
 
+        Manager<Layout> manager = new ManagerLayout();
         manager.save(layout);
         manager.close();
     }
 
     private static void select() {
-        Manager<Layout> manager = new ManagerLayout();
-
-
         Layout layout = new Layout();
         layout.setName("Пельмешки");
         layout.setId(2);
@@ -81,14 +72,13 @@ public class Main {
         parameters.setUseForSelect("id", false);
         parameters.setUseForSelect("name", true);
 
+        Manager<Layout> manager = new ManagerLayout();
         Collection<Layout> select = manager.select(criteriaHelper);
         LOGGER.info("Select = " + select);
         manager.close();
     }
 
     private static void update() {
-        Manager<Layout> manager = new ManagerLayout();
-
         Layout layoutForFind = new Layout();
         layoutForFind.setName("Молоко");
 
@@ -97,6 +87,8 @@ public class Main {
 
         Parameters newParameters = ParametersFactory.createParameter(new Layout("Хлеб"));
         newParameters.setUseForUpdate("name", true);
+
+        Manager<Layout> manager = new ManagerLayout();
         manager.update(oldParameters, newParameters);
         manager.close();
     }

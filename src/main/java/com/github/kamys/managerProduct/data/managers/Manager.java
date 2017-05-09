@@ -29,10 +29,10 @@ public interface Manager<T> {
     /**
      * Use for delete T.
      *
-     * @param criteriaHelper contains parameters for finding T and delete him
+     * @param findParameters contains parameters for finding T and delete him.
      * @return T is delete.
      */
-    Collection<T> delete(CriteriaHelper<T> criteriaHelper);
+    Collection<T> delete(Parameters findParameters);
 
     /**
      * Use for selection by parameters.

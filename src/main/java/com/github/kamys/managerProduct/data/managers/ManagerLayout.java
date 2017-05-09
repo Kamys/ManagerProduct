@@ -33,8 +33,9 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
             session.save(layout);
             tr.commit();
         } catch (HibernateException e) {
-            if (tr != null) tr.rollback();
             LOGGER.warn(e);
+            if (tr != null) tr.rollback();
+            throw e;
         }
     }
 
@@ -46,27 +47,31 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
             tr = session.beginTransaction();
             CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            CriteriaHelper<Layout> criteriaHelper = CriteriaFactory.createCriteria(oldParameters);
-            CriteriaUpdate<Layout> delete = criteriaHelper
+            CriteriaHelper<Layout> criteriaHelper =
+                    CriteriaFactory.createCriteria(oldParameters);
+            CriteriaUpdate<Layout> update = criteriaHelper
                     .createCriteriaUpdate(builder, newParameters);
 
-            session.createQuery(delete).executeUpdate();
+            session.createQuery(update).executeUpdate();
             tr.commit();
 
         } catch (HibernateException e) {
-            if (tr != null) tr.rollback();
             LOGGER.warn(e);
+            if (tr != null) tr.rollback();
+            throw e;
         }
         LOGGER.debug("update: stop");
     }
 
     @Override
-    public Collection<Layout> delete(CriteriaHelper<Layout> criteriaHelper) {
-        LOGGER.info("delete: criteriaHelper = " + criteriaHelper);
+    public Collection<Layout> delete(Parameters findParameters) {
+        LOGGER.info("delete: findParameters = " + findParameters);
         Transaction tr = null;
         try (Session session = factory.openSession()) {
             tr = session.beginTransaction();
 
+            CriteriaHelper<Layout> criteriaHelper =
+                    CriteriaFactory.createCriteria(findParameters);
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaDelete<Layout> delete = criteriaHelper
                     .createCriteriaDelete(builder);
@@ -75,10 +80,11 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
             tr.commit();
 
         } catch (HibernateException e) {
-            if (tr != null) tr.rollback();
             LOGGER.warn(e);
+            if (tr != null) tr.rollback();
+            throw e;
         }
-        LOGGER.debug("delete: stop");
+        LOGGER.debug("delete: stop.");
         return null;
     }
 
@@ -98,8 +104,8 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
             tr.commit();
             return resultList;
         } catch (HibernateException e) {
-            if (tr != null) tr.rollback();
             LOGGER.warn(e);
+            if (tr != null) tr.rollback();
             throw e;
         }
     }
@@ -119,8 +125,8 @@ public class ManagerLayout extends HibernateManager implements Manager<Layout> {
             LOGGER.info("getAll: return = " + result);
             return result;
         } catch (HibernateException e) {
-            if (tr != null) tr.rollback();
             LOGGER.warn(e);
+            if (tr != null) tr.rollback();
             throw e;
         }
     }

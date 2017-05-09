@@ -51,7 +51,6 @@ public class CriteriaHelper<T> {
         CriteriaDelete<T> delete = builder.createCriteriaDelete(classT);
         Root<T> layoutRoot = delete.from(classT);
 
-
         List<Predicate> predicates = createPredicates(builder, layoutRoot);
         delete.where(predicates.toArray(new Predicate[]{}));
 

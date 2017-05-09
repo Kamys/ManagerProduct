@@ -92,6 +92,23 @@ public class LayoutTestDB extends DBUnitConfig {
         Assertion.assertEquals(expectedData, actualData);
     }
 
+    public void testDeleteOnId() throws Exception {
+        Layout oldLayout = createLayout("", 2);
+        Parameters oldParameter = ParametersFactory.createParameter(oldLayout);
+        oldParameter.setUseForSelect("id", true);
+
+        Layout newLayout = createLayout("Сырок", -1);
+        Parameters newParameter = ParametersFactory.createParameter(newLayout);
+        newParameter.setUseForUpdate("name", true);
+        service.delete(oldParameter);
+
+        IDataSet expectedData = createDataSet("entity/layout-data-delete.xml");
+
+        IDataSet actualData = tester.getConnection().createDataSet();
+
+        Assertion.assertEquals(expectedData, actualData);
+    }
+
     private IDataSet createDataSet(String path) throws Exception {
         return new FlatXmlDataSetBuilder().build(
                 Thread.currentThread().getContextClassLoader()
